@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Learn JavaScript Debug</title>
+        <style>
+            .button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                margin: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            }
+        </style>
+
+        
+    </head>
+    <body>
+        <div id="app">
+            <button class="button" onclick="open_zhihu()">
+                打开知乎
+            </button><br/>
+            <button class="button" onclick="open_toutiao()">
+                打开头条
+            </button><br/>
+            <button class="button" onclick="open_test()">
+                打开测试
+            </button><br/>
+
+            <div id="a">
+                <h1>链接测试</h1>
+                <ul>
+                    <li><a href="snssdk143://detail?groupid=6875293256238760461">今日头条</a></li>
+                    <li><a href="zhihu://answer/1371371022">知乎</a></li>
+                    <li><a href="poetry://yingjue.info/test">测试</a></li>
+                    <li><a href="intent://about/#Intent;scheme=harttle;package=land.harttle;S.browser_fallback_url=http%3A%2F%2Fharttle.land%2Fabout.html;end">测试</a></li>
+                    <li><a href="intent://whatever/#Intent;scheme=poetry123;package=info.yingjue.poetry;S.browser_fallback_url=http%3A%2F%2Fyingjue.info;end"> Take a QR code </a></li>
+                </ul>
+            </div>
+            <div id="b">
+                <h1>Window.open测试</h1>
+                <button class="button" onclick="open_zhihu1()">打开知乎</button><br/>
+                <button class="button" onclick="open_toutiao1()">打开头条</button><br/>
+                <button class="button" onclick="open_test1()">打开测试</button><br/>
+            </div>
+            <div id="c">
+                <h1>AppLinks测试</h1>
+                <button class="button" onclick="open_test2()">打开测试</button><br/>
+            </div>
+        </div>
+        <script>
+            var origin_window_open = window.open;
+            window.open = function my_open(strUrl, strWindowName, strWindowFeatures){
+                console.log(strUrl);
+                origin_window_open(strUrl);
+            }
+            function fn () {
+                window.open('https://v.qq.com');
+            }
+            var a = { age: 10 };
+            Object.defineProperty(a, 'age', {
+                get: function() { //取值的时候会触发
+                    console.log('get: ', age);  
+                    return age;
+                },
+                set: function(value) { //更新值的时候会触发
+                    age = value;
+                    console.log('set: ', age); 
+                }
+            });
+            function age() {
+                a.age = 20; //set: 20
+            }
+
+            window.addEventListener('beforeunload', function (e) {
+                // the absence of a returnValue property on the event will guarantee the browser unload happens
+                // delete e['returnValue'];
+                console.log(e);
+            });
+            
+            function open_zhihu(){
+                window.location.href='zhihu://answer/1371371022';
+            }
+            function open_toutiao(){
+                window.location.href='snssdk143://detail?groupid=6875293256238760461';
+            }
+            function open_test(){
+                window.location.href='poetry://yingjue.info/test';
+            }
+
+            function open_zhihu1(){
+                window.open('zhihu://answer/1371371022');
+            }
+            function open_toutiao1(){
+                window.open('snssdk143://detail?groupid=6875293256238760461');
+            }
+            function open_test1(){
+                window.open('poetry://yingjue.info/test');
+            }
+            function open_test2(){
+                window.open('https://tatamobile.net/test');
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Learn JavaScript Debug</title>
+
+        <script>
+            var origin_window_open = window.open;
+            window.open = function my_open(strUrl, strWindowName, strWindowFeatures){
+                console.log(strUrl);
+                origin_window_open(strUrl);
+            }
+            function fn () {
+                window.open('https://v.qq.com');
+            }
+
+            
+
+            // var location = window.location;
+            // Object.defineProperty(window.location, "href", {
+            //     get: function() { return bValue; },
+            //     set: function(newValue) { 
+            //         bValue = newValue;
+            //         console.log(newValue);
+            //          },
+            
+            // });
+
+            var _location = window.document.location;
+            // location.__proto__ = _location;
+
+            // location.__defineSetter__('href', function(url) {
+            //     console.log(url);
+            // _location.href = url;
+            // });
+
+            // location.__defineGetter__('href', function(url) {
+            //     return _location.href;
+            // });
+            // window.location = new Proxy(_location, {
+            // set: function(target, prop, value, receiver){
+            //     if (prop !== 'href'){
+            //         Reflect.set(target, prop, value, receiver);
+            //     }else{
+            //         console.log(value);
+            //         Reflect.set(target, prop, value, receiver);
+            //         // target.href = "FreeBuf.COM | 关注黑客与极客";
+            //     }
+            // }
+            // });
+
+            var a = { age: 10 };
+            Object.defineProperty(a, 'age', {
+                get: function() { //取值的时候会触发
+                    console.log('get: ', age);  
+                    return age;
+                },
+                set: function(value) { //更新值的时候会触发
+                    age = value;
+                    console.log('set: ', age); 
+                }
+            });
+            function age() {
+                a.age = 20; //set: 20
+            }
+
+            window.addEventListener('beforeunload', function (e) {
+                // the absence of a returnValue property on the event will guarantee the browser unload happens
+                // delete e['returnValue'];
+                console.log(e);
+            });
+            
+
+        </script>
+    </head>
+    <body>
+        <button onclick="window.location.href='https://www.baidu.com';">
+            打开百度
+        </button>
+        <button onclick="fn()">
+            打开腾讯视频
+        </button>
+        <button onclick="age()">
+            Test Age
+        </button>
+    </body>
+</html>

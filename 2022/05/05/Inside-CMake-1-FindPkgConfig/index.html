@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入理解CMake（一）: FindPkgConfig | TATAMOBILE</title>
+  <meta name="author" content="TATAMOBILE">
+  
+  <meta name="description" content="user growth tech">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="深入理解CMake（一）: FindPkgConfig"/>
+  <meta property="og:site_name" content="TATAMOBILE"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="shortcut icon" href="/favicon.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!--[if lt IE 9]><script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FXZ3M3DJK6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-FXZ3M3DJK6');
+</script>
+
+
+  
+<!-- Google Adsense -->
+<!-- <script data-ad-client="ca-pub-6011041061943855" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">TATAMOBILE</a></h1>
+  <h2><a href="/">安卓源码分析</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-Inside-CMake-1-FindPkgConfig" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2022-05-05T07:17:53.000Z"><a href="/2022/05/05/Inside-CMake-1-FindPkgConfig/">2022-05-05</a></time>
+        
+  
+    <h1 class="p-name title" itemprop="headline name">深入理解CMake（一）: FindPkgConfig</h1>
+  
+
+      
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+        
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>在某些FindXXX.cmake模块中经常出现下面这两条命令：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(PkgConfig QUIET)</span><br><span class="line">pkg_check_modules(PC_GLIB2 QUIET glib-<span class="number">2.0</span>)</span><br></pre></td></tr></table></figure>
+<p>主要在一些第三方库没有提供CMake模块，只提供了pkg-config的配置，需要开发者自己开发CMake模块。<br>本文详细介绍这两条命令的含义。</p>
+<h2 id="搜索pkg-config"><a href="#搜索pkg-config" class="headerlink" title="搜索pkg-config"></a>搜索pkg-config</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(<span class="number">3.18</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(proj1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(PkgConfig QUIET)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PKG_CONFIG_FOUND:$&#123;PKG_CONFIG_FOUND&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PKG_CONFIG_VERSION_STRING:$&#123;PKG_CONFIG_VERSION_STRING&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PKG_CONFIG_EXECUTABLE:$&#123;PKG_CONFIG_EXECUTABLE&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PKG_CONFIG_ARGN:$&#123;PKG_CONFIG_ARGN&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-- PKG_CONFIG_FOUND:TRUE</span><br><span class="line">-- PKG_CONFIG_VERSION_STRING:0.29.2</span><br><span class="line">-- PKG_CONFIG_EXECUTABLE:/usr/bin/pkg-config</span><br><span class="line">-- PKG_CONFIG_ARGN:</span><br></pre></td></tr></table></figure>
+
+<p>find_package(PkgConfig) 找到CMake模块：<br>/usr/share/cmake-3.18/Modules/FindPkgConfig.cmake 并执行。<br>该模块主要搜索pkg-config可执行程序的位置，并定义了三个宏：</p>
+<ul>
+<li>pkg_get_variable</li>
+<li>pkg_check_modules</li>
+<li>pkg_search_module</li>
+</ul>
+<h2 id="宏pkg-check-modules"><a href="#宏pkg-check-modules" class="headerlink" title="宏pkg_check_modules"></a>宏pkg_check_modules</h2><p>使用pkg_check_modules查找一个模块</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pkg_check_modules(PC_GLIB2 QUIET glib-<span class="number">2.0</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_FOUND:$&#123;PC_GLIB2_FOUND&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LIBRARIES:$&#123;PC_GLIB2_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LINK_LIBRARIES:$&#123;PC_GLIB2_LINK_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LIBRARY_DIRS:$&#123;PC_GLIB2_LIBRARY_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LDFLAGS:$&#123;PC_GLIB2_LDFLAGS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LDFLAGS_OTHER:$&#123;PC_GLIB2_LDFLAGS_OTHER&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_INCLUDE_DIRS:$&#123;PC_GLIB2_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_CFLAGS:$&#123;PC_GLIB2_CFLAGS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_CFLAGS_OTHER:$&#123;PC_GLIB2_CFLAGS_OTHER&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_INCLUDEDIR:$&#123;PC_GLIB2_INCLUDEDIR&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PC_GLIB2_LIBDIR:$&#123;PC_GLIB2_LIBDIR&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-- PC_GLIB2_FOUND:1</span><br><span class="line">-- PC_GLIB2_LIBRARIES:glib-2.0</span><br><span class="line">-- PC_GLIB2_LINK_LIBRARIES:/usr/lib/x86_64-linux-gnu/libglib-2.0.so</span><br><span class="line">-- PC_GLIB2_LIBRARY_DIRS:</span><br><span class="line">-- PC_GLIB2_LDFLAGS:-lglib-2.0</span><br><span class="line">-- PC_GLIB2_LDFLAGS_OTHER:</span><br><span class="line">-- PC_GLIB2_INCLUDE_DIRS:/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include</span><br><span class="line">-- PC_GLIB2_CFLAGS:-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include</span><br><span class="line">-- PC_GLIB2_CFLAGS_OTHER:</span><br><span class="line">-- PC_GLIB2_INCLUDEDIR:/usr/include</span><br><span class="line">-- PC_GLIB2_LIBDIR:/usr/lib/x86_64-linux-gnu</span><br></pre></td></tr></table></figure>
+
+<p>pkg-config 解析相应的pc文件：/usr/lib/x86_64-linux-gnu/pkgconfig/glib-2.0.pc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">prefix&#x3D;&#x2F;usr</span><br><span class="line">libdir&#x3D;$&#123;prefix&#125;&#x2F;lib&#x2F;x86_64-linux-gnu</span><br><span class="line">includedir&#x3D;$&#123;prefix&#125;&#x2F;include</span><br><span class="line"></span><br><span class="line">bindir&#x3D;$&#123;prefix&#125;&#x2F;bin</span><br><span class="line">glib_genmarshal&#x3D;$&#123;bindir&#125;&#x2F;glib-genmarshal</span><br><span class="line">gobject_query&#x3D;$&#123;bindir&#125;&#x2F;gobject-query</span><br><span class="line">glib_mkenums&#x3D;$&#123;bindir&#125;&#x2F;glib-mkenums</span><br><span class="line"></span><br><span class="line">Name: GLib</span><br><span class="line">Description: C Utility Library</span><br><span class="line">Version: 2.68.4</span><br><span class="line">Requires.private: libpcre &gt;&#x3D;  8.31</span><br><span class="line">Libs: -L$&#123;libdir&#125; -lglib-2.0</span><br><span class="line">Libs.private: -pthread -lm</span><br><span class="line">Cflags: -I$&#123;includedir&#125;&#x2F;glib-2.0 -I$&#123;libdir&#125;&#x2F;glib-2.0&#x2F;include</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/module/FindPkgConfig.html">FindPkgConfig</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/CMake/">CMake</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/CMake/">CMake</a>, <a href="/tags/C/">C++</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      
+<div id="gitalk-container"></div>   
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '15e82eced18a4f3699f5',
+        clientSecret: '9159132c67a2722bbee0d59ff3026bb361bcd81c',
+        repo: 'tatamobile_commnets',
+        owner: 'vforkliu',
+        admin: ["vforkliu"],
+        id: '2022-05-05 15:17:53',
+        title: '深入理解CMake（一）: FindPkgConfig',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+    gitalk.render('gitalk-container');
+</script>
+      
+  
+</section>
+
+
+
+  <nav id="postnav">
+    
+    
+      <p>上一篇 : <a href="/2022/05/05/Inside-Qt-Series/" >深入理解Qt</a></p>
+    
+   
+    
+      <p>下一篇 : <a href="/2022/02/23/ELF-File-Format-Under-the-Hood/" >重学ELF文件格式</a></p>
+    
+    
+    <div class="clearfix"></div>
+  </nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+        
+    <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="as_sitesearch" value="tatamobile.net">
+  </form>
+</div>
+
+
+    
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/CMake/">CMake</a><small>1</small></li>
+  
+    <li><a href="/categories/Python/">Python</a><small>2</small></li>
+  
+    <li><a href="/categories/Qt/">Qt</a><small>1</small></li>
+  
+    <li><a href="/categories/Reverse-Engineering/">Reverse Engineering</a><small>5</small></li>
+  
+  </ul>
+</div>
+
+
+    
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/C/">C++</a><small>1</small></li>
+  
+    <li><a href="/tags/CMake/">CMake</a><small>1</small></li>
+  
+    <li><a href="/tags/Decorator/">Decorator</a><small>1</small></li>
+  
+    <li><a href="/tags/Metaclass/">Metaclass</a><small>1</small></li>
+  
+    <li><a href="/tags/Python/">Python</a><small>2</small></li>
+  
+    <li><a href="/tags/Qt/">Qt</a><small>1</small></li>
+  
+    <li><a href="/tags/android/">android</a><small>3</small></li>
+  
+    <li><a href="/tags/arm/">arm</a><small>4</small></li>
+  
+    <li><a href="/tags/elf/">elf</a><small>1</small></li>
+  
+    <li><a href="/tags/java/">java</a><small>1</small></li>
+  
+    <li><a href="/tags/jni/">jni</a><small>1</small></li>
+  
+    <li><a href="/tags/markdown/">markdown</a><small>1</small></li>
+  
+    <li><a href="/tags/unicorn/">unicorn</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6011041061943855" crossorigin="anonymous"></script>
+        <!-- 侧边栏广告 -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-6011041061943855"
+            data-ad-slot="2644505017"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2024 TATAMOBILE|<a href="http://beian.miit.gov.cn/"; target=_blank>粤ICP备2020090023号</a>|<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030902002346">粤公网安备 44030902002346号</a>
+  
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+
+
+<script src="/js/gallery.js"></script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script>
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

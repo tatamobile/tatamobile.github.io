@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.js"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus@1.0.2-beta.48/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./style.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-plus@1.0.2-beta.48/lib/index.full.js"></script>
+    <title>Element Plus demo</title>
+  </head>
+  <body>
+    <div id="app">
+      <el-container>
+        <el-header>
+          
+          <div class="line"></div>
+          <el-menu
+            :default-active="activeIndex2"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            >
+            <el-menu-item index="1">处理中心</el-menu-item>
+            <el-submenu index="2">
+              <template #title>我的工作台</template>
+              <el-menu-item index="2-1">选项1</el-menu-item>
+              <el-menu-item index="2-2">选项2</el-menu-item>
+              <el-menu-item index="2-3">选项3</el-menu-item>
+              <el-submenu index="2-4">
+                <template #title>选项4</template>
+                <el-menu-item index="2-4-1">选项1</el-menu-item>
+                <el-menu-item index="2-4-2">选项2</el-menu-item>
+                <el-menu-item index="2-4-3">选项3</el-menu-item>
+              </el-submenu>
+            </el-submenu>
+            <el-menu-item index="3" disabled>消息中心</el-menu-item>
+            <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+          </el-menu>
+          <p>Tag</p>
+          <p>Tag</p>
+        </el-header>
+        <el-container>
+            <el-main>
+              <el-button>{{ message }}</el-button>
+              <el-alert
+                title="成功提示的文案"
+                type="success">
+              </el-alert>
+              <!-- <el-calendar v-model="date">
+              </el-calendar> -->
+            </el-main>
+            <el-aside width="200px">
+              <p>Tag</p>
+              <el-menu>
+                <el-menu-item index="1">主页</el-menu-item>
+                <el-menu-item index="2">博客</el-menu-item>
+                <el-menu-item index="3">学习笔记</el-menu-item>
+              </el-menu>
+              <p>Tag</p>
+            </el-aside>
+        </el-container>
+        <el-footer>
+          © 2021 TATAMOBILE | 粤ICP备 2020090023号
+        </el-footer>
+      </el-container>
+    </div>
+    <script>
+      const App = {
+        data() {
+          return {
+            message: "Hello Element Plus",
+            date: new Date(),
+          };
+        },
+      };
+      const app = Vue.createApp(App);
+      app.use(ElementPlus);
+      app.mount("#app");
+    </script>
+  </body>
+</html>
