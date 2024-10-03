@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Authors') }} - {{ SITENAME }}{% endblock %}
+
+{% block breadcrumbs %}
+    {% if DISPLAY_BREADCRUMBS %}
+        <ol class="breadcrumb">
+            <li><a href="{{ SITEURL }}" title="{{ SITENAME }}"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="active"><a href="" title="Authors">{{ _('Authors') }}</a></li>
+        </ol>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section id="content">
+    <article>
+        <h1>Authors on {{ SITENAME }}</h1>
+        <ul class="list-group list-inline">
+        {% for author, articles in authors|sort %}
+            {% if AUTHORS is defined %}
+                {% set _author = AUTHORS.get(author.name, None) %}
+            {% else %}
+                {% set _author = None %}
+            {% endif %}
+            <li>
+                <div class="figure">
+                    <a href="{{ author.url }}" class="reference external image-reference">
+                        <img class="author-avatar" src="{% if _author.avatar %}{{ SITEURL }}{{ _author.avatar }}{% else %}http://placehold.it/180x180&text={{ author.name }} avatar{% endif %}" alt="{{ author.name }}">
+                    </a>
+                    <p class="caption"><a href="{{ author.url }}">{{ author.name }}</a></p>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </article>
+</section>
+{% endblock %}

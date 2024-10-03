@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if articles %}
+        {% for article in (articles_page.object_list if articles_page else articles) %}
+            <article>
+                <header class="index-header">
+                    <div class="figure figure-summary pull-left">
+                        {% if article.figure %}
+                        <a href="{{ SITEURL }}/{{ article.url }}" class="reference external image-reference"><img src="{{ SITEURL }}/images/cover/{{ article.figure }}"></a>
+                        {% else %}
+                            <a href="{{ SITEURL }}/{{ article.url }}" class="reference external image-reference"><img src="{{ SITEURL }}/images/logo.png"></a>
+                        {% endif %}
+                    </div>
+                    <div class="header-title-meta">
+                        <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title|striptags }}</a></h2>
+                        {% include 'includes/article_info.html' %}
+                    </div>
+                    
+                </header>
+                <div class="entry-content">
+                    <p>{{ article.summary|replace("<html>","")|replace("<body>","")|replace("</html>","")|replace("</body>","") }}</p>
+                </div>
+                <div>
+                    <a id="more" class="btn btn-primary btn-xs pull-right" href="{{ SITEURL }}/{{ article.url }}">More <i class="fa fa-long-arrow-right"></i></a>
+                </div>
+            </article>
+        {% endfor %}
+    {% endif %}
+
+    {% include 'includes/pagination.html' %}
+{% endblock content %}

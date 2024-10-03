@@ -1,0 +1,4 @@
+{% if CONTEXT is not defined %}
+    {% set CONTEXT = 'index' %}
+{% endif %}
+{% extends "article_list.html" %}

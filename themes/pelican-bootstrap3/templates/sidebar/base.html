@@ -1,0 +1,39 @@
+{% if SIDEBAR_POSITION is not defined %}
+    {% set SIDEBAR_POSITION = 'left' %}
+{% endif %}
+
+{% if SIDEBAR_ELEMENTS is not defined or 'all' in SIDEBAR_ELEMENTS %}
+    {% set SIDEBAR_ELEMENTS = ['categories', 'tagcloud', 'recent'] %}
+{% endif %}
+
+{%
+    set SIDEBAR_MAP = {
+            'condensed' :  'sidebar/condensed.html',
+            'recent' :  'sidebar/recent-posts.html',
+            'adsense' :  'sidebar/adsense.html',
+            'categories' :  'sidebar/categories.html',
+            'tagcloud' :  'sidebar/tagcloud.html',
+            'links' :  'includes/sidebar/links.html',
+            'twitter' :  'includes/twitter_timeline.html',
+            'github' :  'includes/github.html',
+    }
+%}
+
+{% if CONTEXT not in HIDE_SIDEBAR_IN %}
+    <div class="col-xs-12 col-md-3 {% if SIDEBAR_POSITION == 'right' %}col-md-push-9{% endif %}" id="sidebar">
+        <aside>
+            {% if 'brand' in SIDEBAR_ELEMENTS %}
+                {% include 'sidebar/brand.html' %}
+            {% endif %}
+            <section class="visible-lg visible-md" id="sidebar-content{% if SIDEBAR_POSITION == 'left' %}-left{% endif %}">
+                <ul class="list-group list-group-flush">
+                    {% for element in SIDEBAR_ELEMENTS %}
+                        {% if element != 'brand' %}
+                        {% include SIDEBAR_MAP[element] %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </section>
+        </aside>
+    </div>
+{% endif %}
