@@ -3,7 +3,7 @@ Date: 2021-06-24 21:20:55
 Modified: 2022-05-05 15:17:53
 Category: Reverse Engineering
 Tags: unicorn, arm
-Slug: unicorn-v1-0-3-bug-it-instruction-not-work
+Slug: unicorn103-it-not-work
 Figure: idapro.png
 
 ## 测试代码

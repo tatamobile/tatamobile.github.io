@@ -21,3 +21,6 @@ pip install ghp-import
 
 ## References
 1. https://getpelican.com/#quickstart
+
+reverse-engineering/unicorn103-it-not-work
+reverse-engineering/elf-file-format-under-the-hood

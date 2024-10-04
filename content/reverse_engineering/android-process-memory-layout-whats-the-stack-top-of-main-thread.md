@@ -3,7 +3,7 @@ Date: 2022-02-09 17:10:09
 Modified: 2023-02-09 17:10:09
 Category: Reverse Engineering
 Tags: arm, android
-Slug: android-process-memory-layout-whats-the-stack-top-of-main-thread
+Slug: whats-stack-top-main-thread
 Figure: android.png
 
 

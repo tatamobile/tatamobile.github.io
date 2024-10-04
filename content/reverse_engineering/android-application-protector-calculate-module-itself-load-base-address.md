@@ -3,7 +3,7 @@ Date: 2022-02-10 22:21:12
 Modified: 2023-02-10 22:21:12
 Category: Reverse Engineering
 Tags: arm, android
-Slug: android-application-protector-calculate-module-itself-load-address
+Slug: calcute-so-address
 Figure: android.png
 
 
