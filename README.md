@@ -19,6 +19,14 @@ pip install pelican-render-math -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 pip install ghp-import
 
+## Usage
+```bash
+pelican -o output --extra-settings SITEURL='"http://localhost:8000"'
+pelican -o output --extra-settings SITEURL='"http://127.0.0.1:8000"'
+```
+
+
+
 ## References
 1. https://getpelican.com/#quickstart
 
