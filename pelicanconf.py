@@ -141,9 +141,10 @@ TAG_CLOUD_MAX_ITEMS=25
 
 MD_INCLUDE_BASE_PATH = "sourcecode"
 
-GITALK_REPO_NAME = "gitalk_comments"
-GITALK_REPO_OWNER = "tatamobile"
-GITALK_REPO_ADMIN = "tatamobile"
+GISGUS_REPO_NAME = "tatamobile/tatamobile.github.io"
+GISGUS_REPO_ID = "R_kgDOMugGsw"
+GISGUS_CATEGORY_NAME = "Announcements"
+GISGUS_CATEGORY_ID = "DIC_kwDOMugGs84Cu6-F"
 
 STATIC_PATHS = [
     'images',
