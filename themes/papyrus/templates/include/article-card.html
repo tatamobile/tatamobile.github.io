@@ -1,0 +1,20 @@
+<li class="p-2 bg-neutral-100 dark:bg-zinc-800 rounded-lg">
+    <div class="flex items-center space-x-4">
+        <img src="{{ SITEURL }}/images/{% if article.figure %}cover/{{ article.figure }}{% else %}logo.png{% endif %}" class="hidden sm:block flex-none h-25 w-auto" />
+        <div class="flex flex-col grow min-w-0">
+            <h1 class="font-semibold text-lg"><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title}}</a></h1>
+            <div class="flex text-xs">
+                <time>{{ article.date|strftime('%B %d, %Y') }}</time>
+                {% if article.readtime %}
+                <span>&nbsp;·&nbsp;{{ article.readtime }} min read</span>
+                {% endif %}
+                {% if article.author != '' %}
+                <span>&nbsp;·&nbsp;{{ article.author }}</span>
+                {% endif %}
+            </div>
+            <div class="grow mt-4 wrap-break-word">
+                {{ article.summary }}
+            </div>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITENAME }} | Tags{% endblock %}
+{% set current = "tags" %}
+
+{% block content %}
+
+<div class="text-gray-800 dark:text-gray-300">
+    <h1 class="font-bold text-xl p-2 mb-5 bg-neutral-200 dark:bg-neutral-700 rounded-lg">Tags</h1>
+    <ul class="flex-col space-y-2">
+        {% for tag, articles in tags|sort %}
+        <li class="p-2 bg-white dark:bg-zinc-800 rounded-lg font-semibold">
+            <a href="{{ SITEURL }}/{{ tag.url }}">
+                {{ tag }}<sup class="p-1">{{ articles|count }}</sup>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

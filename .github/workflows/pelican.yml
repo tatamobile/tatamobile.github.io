@@ -11,8 +11,6 @@ env:
   PYTHON: "3.12"
   SITEURL: "https://tatamobile.net"
   FEED_DOMAIN: "https://tatamobile.net"
-  GITALK_CLIENT_ID: "${{ secrets.GITALK_CLIENT_ID }}"
-  GITALK_CLIENT_SECRET: "${{ secrets.GITALK_CLIENT_SECRET }}"
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -41,8 +39,6 @@ jobs:
           cmd += " --settings ${{ env.SETTINGS }}"
           cmd += " --extra-settings"
           cmd += """ SITEURL='"${{ env.SITEURL }}"'"""
-          cmd += """ GITALK_CLIENT_ID='"${{ env.GITALK_CLIENT_ID }}"'"""
-          cmd += """ GITALK_CLIENT_SECRET='"${{ env.GITALK_CLIENT_SECRET }}"'"""
           cmd += """ FEED_DOMAIN='"${{ env.FEED_DOMAIN }}"'"""
           cmd += " --output ${{ env.OUTPUT_PATH }}"
 

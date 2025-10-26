@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block html_lang %}{{ article.lang }}{% endblock %}
+{% block head -%}
+{{ super() -}}
+{% if article.summary %}
+<meta name="description" content="{{ article.summary | striptags | safe | truncate(150) }}" />
+{% endif %}
+{% endblock %}
+{% block title %}{{ article.title|striptags }}{% endblock %}
+{% block extra_head %}
+{% import 'translations.html' as translations with context %}
+{% if translations.entry_hreflang(article) %}
+{{ translations.entry_hreflang(article) }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">{{article.title}}</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>{{ article.date|strftime('%B %d, %Y') }}</time>
+        <div>
+          {% if article.readtime %}
+          <span>&nbsp;·&nbsp;{{ article.readtime }} min read</span>
+          {% endif %}
+        </div>
+        <div>
+          {% if article.author != '' %}
+          <span>&nbsp;·&nbsp;{{ article.author }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </footer>
+    {% if article.modified %}
+    <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+      <span>Last updated: {{ article.modified|strftime('%B %d, %Y') }}</span>
+    </div>
+    {% endif %}
+  </header>
+  {% if article.toc %}
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      {{ article.toc }}
+    </div>
+  </details>
+  {% endif %}
+  <article class="mt-4 prose dark:prose-invert">
+    {{ article.content }}
+  </article>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+      {% for tag in article.tags|sort %}
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-4 my-2">
+      {% if article.next_article %}
+      <div class="w-full sm:w-1/2 py-2 bg-neutral-100 dark:bg-neutral-700 text-zinc-800 dark:text-zinc-300 rounded">
+        <a href="{{ SITEURL }}/{{ article.next_article.url }}">
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 flex-shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+            <p class="truncate flex-1 text-left py-1 hover:underline">
+              {{ article.next_article.title }}
+            </p>
+          </div>
+        </a>
+      </div>
+      {% else %}
+      <div class="w-full sm:w-1/2 rounded"></div>
+      {% endif %}
+      {% if article.prev_article %}
+      <div class="w-full sm:w-1/2 py-2 bg-neutral-100 dark:bg-neutral-700 text-zinc-800 dark:text-zinc-300 rounded">
+        <a href="{{ SITEURL }}/{{ article.prev_article.url }}">
+          <div class="flex items-center space-x-2">
+            <p class="truncate flex-1 text-right py-1 hover:underline">{{ article.prev_article.title }}</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 flex-shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </footer>
+  <div class="mt-10">
+    {% include 'include/comments.html' %}
+  </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+<li class="flex items-center space-x-2 p-2 bg-neutral-100 dark:bg-zinc-800 rounded-lg">
+    <div class="flex-none">
+        <img src="{{ SITEURL }}/images/{% if article.figure %}cover/{{ article.figure }}{% else %}logo.png{% endif %}" class="h-15 w-auto" />
+    </div>
+    <a href="{{ SITEURL }}/{{ article.url }}">
+    <div class="flex-col grow">
+        <h1 class="font-semibold text-lg">{{ article.title}}</h1>
+        <div class="flex text-xs">
+            <time>{{ article.date|strftime('%B %d, %Y') }}</time>
+            <div>
+            {% if article.readtime %}
+            <span>&nbsp;·&nbsp;{{ article.readtime }} min read</span>
+            {% endif %}
+            </div>
+            <div>
+            {% if article.author != '' %}
+            <span>&nbsp;·&nbsp;{{ article.author }}</span>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    </a>
+</li>

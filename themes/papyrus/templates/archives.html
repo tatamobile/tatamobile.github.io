@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Archive | {{ SITENAME }}{% endblock %}
+{% set current = "archive" %}
+
+{% block content %}
+<div class="text-zinc-800 dark:text-zinc-300 pb-6">
+    <h1 class="font-bold text-xl p-2 mb-5 bg-neutral-200 dark:bg-neutral-700 rounded-lg">Archive</h1>
+    <ul class="flex-col space-y-2">
+        {% for article in articles %}
+        {% include "include/article-card-simple.html" %}
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

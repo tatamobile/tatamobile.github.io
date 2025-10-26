@@ -1,0 +1,17 @@
+{% if GISGUS_REPO_NAME %}
+<script src="https://giscus.app/client.js"
+        data-repo="{{ GISGUS_REPO_NAME }}"
+        data-repo-id="{{ GISGUS_REPO_ID }}"
+        data-category="{{ GISGUS_CATEGORY_NAME }}"
+        data-category-id="{{ GISGUS_CATEGORY_ID }}"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+{% endif %}
