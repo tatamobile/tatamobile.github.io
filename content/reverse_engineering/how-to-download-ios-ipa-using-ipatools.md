@@ -5,6 +5,7 @@ Category: Reverse Engineering
 Tags: ios,ipa
 Slug: how-to-download-ios-ipa-using-ipatools
 Figure: palera1n.png
+Summary: ipatool is a command line tool that allows you to search for iOS apps on the App Store and download a copy of the app package, known as an ipa file.
 
 ## Install ipatools
 

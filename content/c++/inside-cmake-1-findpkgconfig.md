@@ -5,6 +5,7 @@ Category: C++
 Tags: CMake, C++
 Slug: inside-cmake-1-findpkgconfig
 Figure: cmake.png
+Summary: CMake is the de-facto standard for building C++ code, with over 2 million downloads a month. It’s a powerful, comprehensive solution for managing the software build process.
 
 ## 缘起
 在某些FindXXX.cmake模块中经常出现下面这两条命令：

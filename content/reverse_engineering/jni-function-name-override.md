@@ -5,6 +5,7 @@ Category: Reverse Engineering
 Tags: java, jni
 Slug: jni-function-name-override
 Figure: java.png
+Summary: 最近分析一个Android平台上的so，发现JNI函数命名和自己平时写代码不一样，故重新学习JNI方法的签名规则。
 
 ## 缘起
 最近分析一个Android平台上的so，发现JNI函数命名如下：

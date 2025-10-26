@@ -5,7 +5,7 @@ Category: Reverse Engineering
 Tags: elf, arm, android
 Slug: elf-file-format-under-the-hood
 Figure: android.png
-
+Summary: ELF文件格式的讨论已经存在非常多的文章，这里试图从另一个角度来讨论如何学习ELF文件格式。
 
 ## 缘起
 

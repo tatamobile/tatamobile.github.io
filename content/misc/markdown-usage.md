@@ -5,6 +5,7 @@ Category: Misc
 Tags: markdown
 Slug: markdown-usage
 Figure: pelican.svg
+Summary: Pelican is a static site generator, written in Python.
 
 ## 代码
 ### C++ 代码

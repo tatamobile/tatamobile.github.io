@@ -4,7 +4,8 @@ Modified: 2024-05-05 21:35:23
 Category: Qt
 Tags: Qt, C++
 Slug: inside-qt-series
-Figure: qt.png
+Figure: qt.svg
+Summary: The Qt framework contains a comprehensive set of highly intuitive and modularized C++ library classes and is loaded with APIs to simplify your application development.
 
 ## QObject
 

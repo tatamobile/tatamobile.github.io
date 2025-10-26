@@ -5,7 +5,7 @@ Category: Reverse Engineering
 Tags: arm, android
 Slug: whats-stack-top-main-thread
 Figure: android.png
-
+Summary: 最近开发一个基于unicron的模拟执行库，为了更好地模拟进程和线程的一些特性（比如线程本地存储），需要知道Android进程的实际内存布局
 
 ## 缘起
 最近开发一个基于unicron的模拟执行库，为了更好地模拟进程和线程的一些特性（比如线程本地存储），需要知道Android进程的实际内存布局，这里主要介绍线程栈的布局，非主线程可以通过分析pthread_create实现过程，了解到线程栈是通过mmap分配内存得到的，并且大小是1M。那主线程的栈位于哪里呢？一般进程内存布局如下图：

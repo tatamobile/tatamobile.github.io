@@ -5,6 +5,7 @@ Category: Python
 Tags: python, decorator
 Slug: decorator
 Figure: python.png
+Summary: 装饰器是一种设计模式，在Python中是一个非常有用的特性。可以在不修改函数、方法、类的情况下，修改（扩展）它们的行为。
 
 装饰器是一种设计模式，在Python中是一个非常有用的特性。可以在不修改函数、方法、类的情况下，修改（扩展）它们的行为。常见的装饰器如classmethod、staticmethod等，以@开始 加以使用，其实@只是Python提供的一个语法糖。
 

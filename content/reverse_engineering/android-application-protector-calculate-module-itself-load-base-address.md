@@ -5,7 +5,7 @@ Category: Reverse Engineering
 Tags: arm, android
 Slug: calcute-so-address
 Figure: android.png
-
+Summary: 在Android安全开发中，经常需要获取进程内模块的加载基地址，获取方法一般有：maps和dl_iterate_phdr。
 
 ## 缘起
 在Android安全开发中，经常需要获取进程内模块的加载基地址，获取方法一般有：

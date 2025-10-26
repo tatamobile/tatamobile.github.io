@@ -5,6 +5,7 @@ Category: Python
 Tags: python,metaclass
 Slug: metaclass
 Figure: python.png
+Summary: 在Python里，万物皆对象。整数、字符串、元组、字典和类等都是对象，每个对象都有相对应的类型，对象的类型决定了对象在内存中的存储方式。
 
 在正式开始之前，需要明确几个概念的中文和英文对照：
 
