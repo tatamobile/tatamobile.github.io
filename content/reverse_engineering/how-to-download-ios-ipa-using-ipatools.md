@@ -1,4 +1,4 @@
-Title: How to Download iOS IPA Using ipatools
+Title: How to Download iOS IPA Using ipatool
 Date: 2025-8-26 11:35:42
 Modified: 2025-8-26 11:35:42
 Category: Reverse Engineering
@@ -7,15 +7,15 @@ Slug: how-to-download-ios-ipa-using-ipatools
 Figure: palera1n.png
 Summary: ipatool is a command line tool that allows you to search for iOS apps on the App Store and download a copy of the app package, known as an ipa file.
 
-## Install ipatools
+## Install ipatool
 
 ```bash
-brew install ipatools
+brew install ipatool
 ```
 
 ## Login Apple Account
 ```bash
-ipatools auth
+ipatool auth login -e name@example.com -p password
 ```
 
 ## Download latest version
